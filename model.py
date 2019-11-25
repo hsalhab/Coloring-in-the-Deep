@@ -32,6 +32,6 @@ class IC_Model(tf.keras.Model):
         :param labels:  Actual labels
         :return: the loss of the model as a tensor
         """
-        # TODO: this needs to be changed after conversation with Ritchie
+        # TODO: this needs to be changed after conversation with Ritchie`
         pass
 
