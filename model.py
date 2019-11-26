@@ -114,6 +114,7 @@ class IC_Model(tf.keras.Model):
         :param labels:  Actual labels
         :return: the loss of the model as a tensor
         """
-        # TODO: this needs to be changed after conversation with Ritchie`
-        pass
+        # TODO: soft-encode labels before passing into loss_function
+        return tf.reduce_mean(tf.keras.losses.sparse_categorical_crossentropy(labels, prbs))
+
 
