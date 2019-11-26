@@ -62,7 +62,48 @@ class IC_Model(tf.keras.Model):
         :return:
         """
 
-        pass
+        hidden = self.conv1_1(inputs)
+        hidden = self.conv1_2(hidden)
+        hidden = self.batch1(hidden)
+
+        hidden = self.conv2_1(hidden)
+        hidden = self.conv2_2(hidden)
+        hidden = self.batch2(hidden)
+
+        hidden = self.conv3_1(hidden)
+        hidden = self.conv3_2(hidden)
+        hidden = self.conv3_3(hidden)
+        hidden = self.batch3(hidden)
+
+        hidden = self.conv4_1(hidden)
+        hidden = self.conv4_2(hidden)
+        hidden = self.conv4_3(hidden)
+        hidden = self.batch4(hidden)
+
+        hidden = self.conv5_1(hidden)
+        hidden = self.conv5_2(hidden)
+        hidden = self.conv5_3(hidden)
+        hidden = self.batch5(hidden)
+
+        hidden = self.conv6_1(hidden)
+        hidden = self.conv6_2(hidden)
+        hidden = self.conv6_3(hidden)
+        hidden = self.batch6(hidden)
+
+        hidden = self.conv7_1(hidden)
+        hidden = self.conv7_2(hidden)
+        hidden = self.conv7_3(hidden)
+        hidden = self.batch7(hidden)
+
+        hidden = self.upsample(hidden)
+        hidden = self.conv8_1(hidden)
+        hidden = self.conv8_2(hidden)
+        hidden = self.conv8_3(hidden)
+        hidden = self.batch8(hidden)
+
+        prbs = self.final(hidden)
+
+        return prbs
 
 
     def loss_function(self, prbs, labels):
