@@ -13,7 +13,7 @@ CORS(app)
 def get_image():
     s3 = boto3.client('s3', aws_access_key_id=os.environ['S3_KEY'], aws_secret_access_key=os.environ['S3_SECRET'])
     while True:
-        idx = np.random.randint(17728)
+        idx = np.random.randint(17728, 17733)
         img_name = "{}.png".format(idx)
         try:
             s3.download_file('tcs-img', img_name, "img.png")
