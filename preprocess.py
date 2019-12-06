@@ -2,17 +2,15 @@ import numpy as np
 import tensorflow as tf
 import sklearn.neighbors as nn
 
-l_images = np.load("data/gray_scale.npy")
-ab_images = np.load("data/ab/ab1.npy")
-ab_images = np.concatenate([ab_images, np.load("data/ab/ab2.npy")])
-ab_images = np.concatenate([ab_images, np.load("data/ab/ab3.npy")])
-
 gpu_available = tf.test.is_gpu_available()
 print("GPU Available: ", gpu_available)
 
 
 def get_train_data():
     # TODO: change to handle entire batch
+    data = convert_to_LAB()
+    l_images = data[:, 0]
+    ab_images = data[:, 1:]
     labels = get_labels(ab_images)
     return l_images, ab_images, labels
 
