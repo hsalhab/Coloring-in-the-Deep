@@ -1,6 +1,8 @@
 import numpy as np
 import tensorflow as tf
-import sklearn.neighbors as nn
+from os import walk
+from os.path import join
+from shutil import copyfile
 
 gpu_available = tf.test.is_gpu_available()
 print("GPU Available: ", gpu_available)
@@ -28,7 +30,16 @@ def walk_data():
     walk through data set directory
     :return: None, you should save all images to one directory
     """
-    pass
+    all_files = []
+    data_dir = "SUN2012/Images/"
+    for root, subfolder, files in walk(data_dir):
+        for file in files:
+            if file.endswith('.jpg'):
+                all_files.append(join(root, file))
+                copyfile(join(root, file), join("preprocessed/", file))
+
+    print(all_files)
+    return all_files
 
 def convert_to_LAB():
     """
