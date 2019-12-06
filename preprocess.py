@@ -53,7 +53,7 @@ def walk_data():
     initial_itms = os.listdir("./data/")
     for itm in initial_itms:
         q.put(os.path.abspath(itm))
-    while !q.empty():
+    while not q.empty():
         itm = q.get()
         # checking if item is a file anf ends in jpeg/ jpg
         if os.path.isfile(itm) and itm.lower().endswith((".jpg", ".jpeg")):
@@ -83,4 +83,6 @@ def convert_to_LAB():
     lab = np.asarray(lab)
     return lab
 
-print(convert_to_LAB().shape)
+# print(convert_to_LAB().shape)
+
+print(walk_data())
