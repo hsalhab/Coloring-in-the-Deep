@@ -18,28 +18,23 @@ def get_train_data():
 
 
 def get_labels(ab_img):
-    ab_img = tf.constant(ab_images)
-    width = 0
-    height = 0
-    label = tf.zeros((width * height, 313))
+    """
+    Calculate labels to be passed into loss function
+    :param ab_img: ab channels of images, shape (num_images, 2)
+    :return: labels to pass into loss function
+    """
+    pass
 
-    (dists, indices) = self.nbrs.kneighbors(
-        abimg.view(abimg.shape[0], -1).t(), self.NN)
-    dists = torch.from_numpy(dists).float().cuda()
-    indexes = torch.from_numpy(indexes).cuda()
+def walk_data():
+    """
+    walk through data set directory
+    :return: None, you should save all images to one directory
+    """
+    pass
 
-    weights = torch.exp(-dists ** 2 / (2 * self.sigma ** 2)).cuda()
-    weights = weights / torch.sum(weights, dim=1).view(-1, 1)
-
-    pixel_indexes = torch.Tensor.long(torch.arange(
-        start=0, end=abimg.shape[1] * abimg.shape[2])[:, np.newaxis])
-    pixel_indexes = pixel_indexes.cuda()
-    label[pixel_indexes, indexes] = weights
-    label = label.t().contiguous().view(313, w, h)
-
-    rebal_indexes = indexes[:, 0]
-    rebal_weights = self.weights[rebal_indexes]
-    rebal_weights = rebal_weights.view(w, h)
-    rebal_label = rebal_weights * label
-
-    return rebal_label
+def convert_to_LAB():
+    """
+    read images from the directory saved by walk_date, convert to LAB and store as npy
+    :return: a numpy array
+    """
+    pass
