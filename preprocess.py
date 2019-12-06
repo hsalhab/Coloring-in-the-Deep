@@ -1,9 +1,10 @@
 import numpy as np
 import tensorflow as tf
-import sklearn.neighbors as nn
+from os import walk
+from os.path import join
+from shutil import copyfile
 import cv2
 from PIL import Image  # Python Image Library - Image Processing
-
 
 gpu_available = tf.test.is_gpu_available()
 print("GPU Available: ", gpu_available)
@@ -25,6 +26,22 @@ def get_labels(ab_img):
     :return: labels to pass into loss function
     """
     pass
+
+def walk_data2():
+    """
+    walk through data set directory
+    :return: None, you should save all images to one directory
+    """
+    all_files = []
+    data_dir = "SUN2012/Images/"
+    for root, subfolder, files in walk(data_dir):
+        for file in files:
+            if file.endswith('.jpg'):
+                all_files.append(join(root, file))
+                copyfile(join(root, file), join("preprocessed/", file))
+
+    print(all_files)
+    return all_files
 
 def walk_data():
     """
