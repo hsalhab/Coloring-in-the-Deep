@@ -83,6 +83,4 @@ def convert_to_LAB():
     lab = np.asarray(lab)
     return lab
 
-# print(convert_to_LAB().shape)
-
-print(walk_data())
+print(convert_to_LAB().shape)
