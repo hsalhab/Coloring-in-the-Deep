@@ -55,16 +55,15 @@ def convert_to_LAB():
     read images from the directory saved by walk_date, convert to LAB and store as npy
     :return: a numpy array
     """
-    jpegs = walk_data()
+    jpegs = walk_data2()
     lab = []
     for img in jpegs:
-        im = Image.open(img)
-        rgb_im = im.convert('RGB')
-        lab_im = cv2.cvtColor(rgb_im.astype('uint8'), cv2.COLOR_RGB2LAB)
+        im = cv2.imread(img)
+        lab_im = cv2.cvtColor(im.astype('uint8'), cv2.COLOR_RGB2LAB)
         lab.append(lab_im)
 
 
     lab = np.asarray(lab)
     return lab
 
-    
+print(convert_to_LAB().shape)

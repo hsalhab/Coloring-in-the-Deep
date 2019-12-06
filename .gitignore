@@ -1,3 +1,5 @@
 .idea/
+preprocessed/
 data/
+SUN2012/
 __pycache__/
