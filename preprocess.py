@@ -6,7 +6,6 @@ from os.path import join
 from shutil import copyfile
 from queue import Queue
 import cv2
-from PIL import Image  # Python Image Library - Image Processing
 
 gpu_available = tf.test.is_gpu_available()
 print("GPU Available: ", gpu_available)
@@ -15,8 +14,8 @@ print("GPU Available: ", gpu_available)
 def get_train_data():
     # TODO: change to handle entire batch
     data = convert_to_LAB()
-    l_images = data[:, 0]
-    ab_images = data[:, 1:]
+    l_images = data[:, :, :, 0]
+    ab_images = data[:, :, :, 1:]
     labels = get_labels(ab_images)
     return l_images, ab_images, labels
 
@@ -56,7 +55,7 @@ def walk_data():
     print(initial_itms)
     for itm in initial_itms:
         q.put(os.path.abspath(itm))
-    print(q.qsize())
+
     while not q.empty():
         itm = q.get()
         # checking if item is a file anf ends in jpeg/ jpg
@@ -89,5 +88,3 @@ def convert_to_LAB():
     return lab
 
 # print(convert_to_LAB().shape)
-
-print(walk_data())
