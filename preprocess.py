@@ -1,8 +1,10 @@
 import numpy as np
 import tensorflow as tf
 from os import walk
+import os
 from os.path import join
 from shutil import copyfile
+from queue import Queue
 import cv2
 from PIL import Image  # Python Image Library - Image Processing
 
@@ -50,13 +52,16 @@ def walk_data():
     """
     imgs = list()
     q = Queue()
-    initial_itms = os.listdir("./data/")
+    initial_itms = os.listdir("./data/SUN2012/Images/")
+    print(initial_itms)
     for itm in initial_itms:
         q.put(os.path.abspath(itm))
+    print(q.qsize())
     while not q.empty():
         itm = q.get()
         # checking if item is a file anf ends in jpeg/ jpg
-        if os.path.isfile(itm) and itm.lower().endswith((".jpg", ".jpeg")):
+        if os.path.isfile(itm) and itm[len(itm)- 5:] == '.jpg':
+            print("added to queue")
             imgs.append(itm)
         # checking if item is a directory
         if os.path.isdir(itm):
