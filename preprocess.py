@@ -4,6 +4,7 @@ from os import walk
 from os.path import join
 from shutil import copyfile
 import cv2
+from hyperparameters import IMAge
 
 gpu_available = tf.test.is_gpu_available()
 print("GPU Available: ", gpu_available)
