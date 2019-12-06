@@ -4,7 +4,6 @@ from os import walk
 from os.path import join
 from shutil import copyfile
 import cv2
-from PIL import Image  # Python Image Library - Image Processing
 
 gpu_available = tf.test.is_gpu_available()
 print("GPU Available: ", gpu_available)
@@ -13,8 +12,8 @@ print("GPU Available: ", gpu_available)
 def get_train_data():
     # TODO: change to handle entire batch
     data = convert_to_LAB()
-    l_images = data[:, 0]
-    ab_images = data[:, 1:]
+    l_images = data[:, :, :, 0]
+    ab_images = data[:, :, :, 1:]
     labels = get_labels(ab_images)
     return l_images, ab_images, labels
 
