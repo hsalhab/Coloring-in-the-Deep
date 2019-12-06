@@ -46,9 +46,26 @@ def walk_data2():
 def walk_data():
     """
     walk through data set directory
-    :return: None, you should save all images to one directory
+    :return: list of absolute paths to images
     """
-    pass
+    imgs = list()
+    q = Queue()
+    initial_itms = os.listdir("./data/")
+    for itm in initial_itms:
+        q.put(os.path.abspath(itm))
+    while !q.empty():
+        itm = q.get()
+        # checking if item is a file anf ends in jpeg/ jpg
+        if os.path.isfile(itm) and itm.lower().endswith((".jpg", ".jpeg")):
+            imgs.append(itm)
+        # checking if item is a directory
+        if os.path.isdir(itm):
+            itms = os.listdir(itm)
+            # adding all the items in the directory to the queue
+            for path in itms:
+                # putting absolute value in queue 
+                q.put(os.path.abspath(path))
+    return imgs
 
 def convert_to_LAB():
     """
