@@ -25,7 +25,7 @@ def get_labels(ab_img):
     """
     pass
 
-def walk_data():
+def walk_data2():
     """
     walk through data set directory
     :return: None, you should save all images to one directory
@@ -40,6 +40,13 @@ def walk_data():
 
     print(all_files)
     return all_files
+
+def walk_data():
+    """
+    walk through data set directory
+    :return: None, you should save all images to one directory
+    """
+    pass
 
 def convert_to_LAB():
     """
