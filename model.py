@@ -51,6 +51,7 @@ class IC_Model(tf.keras.Model):
         self.conv8_3 = Conv2D(128, kernel_size=hp.KERNEL_SIZE, activation='relu', padding='same')
         self.batch8 = BatchNormalization()
 
+        self.final_upsample = UpSampling2D(size=(4, 4))
         self.final = Conv2D(hp.NUM_CLASSES, kernel_size=1, padding='same')
 
 
@@ -101,7 +102,8 @@ class IC_Model(tf.keras.Model):
         hidden = self.conv8_3(hidden)
         hidden = self.batch8(hidden)
 
-        logits = self.final(hidden)
+        upsampled = self.final_upsample(hidden)
+        logits = self.final(upsampled)
 
         return logits
 
