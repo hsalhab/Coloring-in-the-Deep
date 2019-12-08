@@ -12,13 +12,14 @@ def train():
     l_imgs, ab_imgs = get_train_data()
     encoder = Encoder()
     num_batches = floor(l_imgs.shape[0] / hp.BATCH_SIZE)
+    print(l_imgs.shape)
     for batch_i in range(num_batches):
+        print("batch {} out of {}".format(batch_i, num_batches))
         inputs_batch = l_imgs[batch_i * hp.BATCH_SIZE: (batch_i + 1) * hp.BATCH_SIZE]
         labels_batch = get_batch_labels(ab_imgs[batch_i * hp.BATCH_SIZE: (batch_i + 1) * hp.BATCH_SIZE], encoder)
-        print("batch {} out of {}".format(batch_i, num_batches))
         with tf.GradientTape() as tape:
             logits = model.call(inputs_batch)
-            loss = model.loss(logits, labels_batch)
+            loss = model.loss_function(logits, labels_batch)
 
         print("loss: {}".format(loss))
         gradients = tape.gradient(loss, model.trainable_variables)
@@ -30,3 +31,6 @@ def get_batch_labels(batch_ab, encoder):
         label = encoder.soft_encode(img)
         labels.append(label)
     return np.asarray(labels)
+
+
+train()

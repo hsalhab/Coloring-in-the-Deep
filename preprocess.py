@@ -5,6 +5,8 @@ from os.path import join
 from shutil import copyfile
 import cv2
 
+from hyperparameters import IMAGE_HEIGHT, IMAGE_WIDTH
+
 gpu_available = tf.test.is_gpu_available()
 print("GPU Available: ", gpu_available)
 
@@ -12,8 +14,8 @@ print("GPU Available: ", gpu_available)
 def get_train_data():
     # TODO: change to handle entire batch
     data = convert_to_LAB()
-    l_images = data[:, :, :, 0]
-    ab_images = data[:, :, :, 1:]
+    l_images = data[:, :, :, 0].reshape((-1, IMAGE_HEIGHT, IMAGE_WIDTH, 1)).astype('float32')
+    ab_images = data[:, :, :, 1:].astype('float32')
     return l_images, ab_images
 
 
