@@ -4,8 +4,6 @@ from os import walk
 from os.path import join
 from shutil import copyfile
 import cv2
-import sklearn.neighbors as nn
-from hyperparameters import IMAGE_HEIGHT, IMAGE_WIDTH, SIGMA
 
 gpu_available = tf.test.is_gpu_available()
 print("GPU Available: ", gpu_available)
@@ -16,37 +14,8 @@ def get_train_data():
     data = convert_to_LAB()
     l_images = data[:, :, :, 0]
     ab_images = data[:, :, :, 1:]
-    labels = get_labels(ab_images)
-    return l_images, ab_images, labels
+    return l_images, ab_images
 
-
-def get_labels(ab_img):
-    """
-    Calculate labels to be passed into loss function
-    :param ab_img: ab channels of images, shape (num_images, 2)
-    :return: labels to pass into loss function
-    """
-    labels = []
-    bin_centers = np.load("bin_centers.npy")
-    knn = nn.NearestNeighbors(
-        n_neighbors=5, algorithm='ball_tree').fit(bin_centers)
-    pixel_idx = np.arange(IMAGE_HEIGHT * IMAGE_WIDTH)[:, np.newaxis]
-    for i, img in enumerate(ab_img):
-        print("img #{} out of {}".format(i, ab_img.shape[0]))
-        label = np.zeros((IMAGE_HEIGHT * IMAGE_WIDTH, 313))
-        img = np.reshape(img, (-1, 2))
-        print(img.shape)
-        distances, indices = knn.kneighbors(img, 5)
-        weights = np.exp(-distances ** 2 / (2 * SIGMA ** 2))
-        weights = weights / np.sum(weights, axis=1)[:, np.newaxis]
-        label[pixel_idx, indices] = weights
-        label = np.reshape(label, (IMAGE_WIDTH, IMAGE_HEIGHT, 313))
-        labels.append(label)
-
-    labels = np.asarray(labels)
-    print(labels.shape)
-    np.save("labels.npy", labels)
-    return labels
 
 def walk_data():
     """
