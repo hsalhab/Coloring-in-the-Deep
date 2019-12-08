@@ -32,7 +32,7 @@ def get_labels(ab_img):
         n_neighbors=5, algorithm='ball_tree').fit(bin_centers)
     pixel_idx = np.arange(IMAGE_HEIGHT * IMAGE_WIDTH)[:, np.newaxis]
     for i, img in enumerate(ab_img):
-        print("img #{} our of {}".format(i, ab_img.shape[0]))
+        print("img #{} out of {}".format(i, ab_img.shape[0]))
         label = np.zeros((IMAGE_HEIGHT * IMAGE_WIDTH, 313))
         img = np.reshape(img, (-1, 2))
         print(img.shape)
@@ -43,7 +43,7 @@ def get_labels(ab_img):
         label = np.reshape(label, (IMAGE_WIDTH, IMAGE_HEIGHT, 313))
         labels.append(label)
 
-    labels = np.asarray(label)
+    labels = np.asarray(labels)
     print(labels.shape)
     np.save("labels.npy", labels)
     return labels
