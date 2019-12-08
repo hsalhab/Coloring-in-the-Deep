@@ -51,7 +51,7 @@ class IC_Model(tf.keras.Model):
         self.conv8_3 = Conv2D(128, kernel_size=hp.KERNEL_SIZE, activation='relu', padding='same')
         self.batch8 = BatchNormalization()
 
-        self.final = Conv2D(hp.NUM_CLASSES, kernel_size=1, activation='softmax', padding='same')
+        self.final = Conv2D(hp.NUM_CLASSES, kernel_size=1, padding='same')
 
 
     @tf.function
@@ -101,12 +101,12 @@ class IC_Model(tf.keras.Model):
         hidden = self.conv8_3(hidden)
         hidden = self.batch8(hidden)
 
-        prbs = self.final(hidden)
+        logits = self.final(hidden)
 
-        return prbs
+        return logits
 
 
-    def loss_function(self, prbs, labels):
+    def loss_function(self, logits, labels):
         """
         Calculates the model loss after one forward pass
 
@@ -115,6 +115,6 @@ class IC_Model(tf.keras.Model):
         :return: the loss of the model as a tensor
         """
         # TODO: soft-encode labels before passing into loss_function
-        return tf.reduce_mean(tf.keras.losses.categorical_crossentropy(labels, prbs))
+        return tf.nn.softmax_cross_entropy_with_logits(labels, logits)
 
 
