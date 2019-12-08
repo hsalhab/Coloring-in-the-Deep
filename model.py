@@ -117,6 +117,6 @@ class IC_Model(tf.keras.Model):
         :return: the loss of the model as a tensor
         """
         # TODO: soft-encode labels before passing into loss_function
-        return tf.nn.softmax_cross_entropy_with_logits(labels, logits)
+        return tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels, logits))
 
 
