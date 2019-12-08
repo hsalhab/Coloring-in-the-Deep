@@ -4,7 +4,8 @@ from os import walk
 from os.path import join
 from shutil import copyfile
 import cv2
-from hyperparameters import IMAge
+import sklearn.neighbors as nn
+from hyperparameters import IMAGE_HEIGHT, IMAGE_WIDTH, SIGMA
 
 gpu_available = tf.test.is_gpu_available()
 print("GPU Available: ", gpu_available)
@@ -15,7 +16,6 @@ def get_train_data():
     data = convert_to_LAB()
     l_images = data[:, :, :, 0]
     ab_images = data[:, :, :, 1:]
-    labels = get_labels(ab_images)
     return l_images, ab_images, labels
 
 
@@ -38,41 +38,17 @@ def walk_data2():
         for file in files:
             if file.endswith('.jpg'):
                 all_files.append(join(root, file))
-                copyfile(join(root, file), join("preprocessed/", file))
+                # copyfile(join(root, file), join("preprocessed/", file))
 
-    print(all_files)
     return all_files
 
-def walk_data():
-    """
-    walk through data set directory
-    :return: list of absolute paths to images
-    """
-    imgs = list()
-    q = Queue()
-    initial_itms = os.listdir("./data/")
-    for itm in initial_itms:
-        q.put(os.path.abspath(itm))
-    while not q.empty():
-        itm = q.get()
-        # checking if item is a file anf ends in jpeg/ jpg
-        if os.path.isfile(itm) and itm.lower().endswith((".jpg", ".jpeg")):
-            imgs.append(itm)
-        # checking if item is a directory
-        if os.path.isdir(itm):
-            itms = os.listdir(itm)
-            # adding all the items in the directory to the queue
-            for path in itms:
-                # putting absolute value in queue 
-                q.put(os.path.abspath(path))
-    return imgs
 
 def convert_to_LAB():
     """
     read images from the directory saved by walk_date, convert to LAB and store as npy
     :return: a numpy array
     """
-    jpegs = walk_data2()
+    jpegs = walk_data()
     lab = []
     for img in jpegs:
         im = cv2.imread(img)
@@ -83,4 +59,4 @@ def convert_to_LAB():
     lab = np.asarray(lab)
     return lab
 
-print(convert_to_LAB().shape)
+get_train_data()

@@ -1,4 +1,7 @@
 .idea/
+dskfjn
+bin_centers.npy
+.DS_Store
 preprocessed/
 data/
 SUN2012/
