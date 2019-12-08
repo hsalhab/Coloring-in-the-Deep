@@ -26,32 +26,29 @@ def get_labels(ab_img):
     :param ab_img: ab channels of images, shape (num_images, 2)
     :return: labels to pass into loss function
     """
-    labels = None
+    labels = []
     bin_centers = np.load("bin_centers.npy")
     knn = nn.NearestNeighbors(
         n_neighbors=5, algorithm='ball_tree').fit(bin_centers)
-    pixel_idx = tf.constant(np.arange(0, ab_img.shape[1] * ab_img.shape[2])[:, np.newaxis], dtype=tf.int64)
+    pixel_idx = np.arange(IMAGE_HEIGHT * IMAGE_WIDTH)[:, np.newaxis]
     for i, img in enumerate(ab_img):
         print("img #{} our of {}".format(i, ab_img.shape[0]))
         label = np.zeros((IMAGE_HEIGHT * IMAGE_WIDTH, 313))
-        ii = np.reshape(img, (-1, 2))
-        print(ii.shape)
-        distances, indices = knn.kneighbors(ii, 5)
+        img = np.reshape(img, (-1, 2))
+        print(img.shape)
+        distances, indices = knn.kneighbors(img, 5)
         weights = np.exp(-distances ** 2 / (2 * SIGMA ** 2))
         weights = weights / np.sum(weights, axis=1)[:, np.newaxis]
-        pixel_idx = np.arange(IMAGE_HEIGHT * IMAGE_WIDTH)[:, np.newaxis]
         label[pixel_idx, indices] = weights
-        label = np.reshape(label, (1, IMAGE_WIDTH, IMAGE_HEIGHT, 313))
-        if labels is None:
-            labels = label
-        else:
-            labels = np.concatenate([labels, label])
+        label = np.reshape(label, (IMAGE_WIDTH, IMAGE_HEIGHT, 313))
+        labels.append(label)
 
+    labels = np.asarray(label)
     print(labels.shape)
     np.save("labels.npy", labels)
     return labels
 
-def walk_data2():
+def walk_data():
     """
     walk through data set directory
     :return: None, you should save all images to one directory
