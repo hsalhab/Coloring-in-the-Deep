@@ -16,6 +16,7 @@ def get_train_data():
     data = convert_to_LAB()
     l_images = data[:, :, :, 0]
     ab_images = data[:, :, :, 1:]
+    labels = get_labels(ab_images)
     return l_images, ab_images, labels
 
 
@@ -25,7 +26,30 @@ def get_labels(ab_img):
     :param ab_img: ab channels of images, shape (num_images, 2)
     :return: labels to pass into loss function
     """
-    pass
+    labels = None
+    bin_centers = np.load("bin_centers.npy")
+    knn = nn.NearestNeighbors(
+        n_neighbors=5, algorithm='ball_tree').fit(bin_centers)
+    pixel_idx = tf.constant(np.arange(0, ab_img.shape[1] * ab_img.shape[2])[:, np.newaxis], dtype=tf.int64)
+    for i, img in enumerate(ab_img):
+        print("img #{} our of {}".format(i, ab_img.shape[0]))
+        label = np.zeros((IMAGE_HEIGHT * IMAGE_WIDTH, 313))
+        ii = np.reshape(img, (-1, 2))
+        print(ii.shape)
+        distances, indices = knn.kneighbors(ii, 5)
+        weights = np.exp(-distances ** 2 / (2 * SIGMA ** 2))
+        weights = weights / np.sum(weights, axis=1)[:, np.newaxis]
+        pixel_idx = np.arange(IMAGE_HEIGHT * IMAGE_WIDTH)[:, np.newaxis]
+        label[pixel_idx, indices] = weights
+        label = np.reshape(label, (1, IMAGE_WIDTH, IMAGE_HEIGHT, 313))
+        if labels is None:
+            labels = label
+        else:
+            labels = np.concatenate([labels, label])
+
+    print(labels.shape)
+    np.save("labels.npy", labels)
+    return labels
 
 def walk_data2():
     """
