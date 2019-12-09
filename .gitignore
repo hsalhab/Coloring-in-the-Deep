@@ -1,6 +1,7 @@
 .idea/
-dskfjn
 bin_centers.npy
+checkpoints/
+output/
 .DS_Store
 preprocessed/
 data/

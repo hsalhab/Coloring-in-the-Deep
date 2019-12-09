@@ -9,7 +9,6 @@ import os
 
 
 def train(model, l_imgs, ab_imgs, manager):
-    encoder = Encoder()
     num_batches = floor(l_imgs.shape[0] / hp.BATCH_SIZE)
     best_loss = float("inf")
     print(l_imgs.shape)
@@ -30,6 +29,12 @@ def train(model, l_imgs, ab_imgs, manager):
         gradients = tape.gradient(loss, model.trainable_variables)
         model.optimizer.apply_gradients(zip(gradients, model.trainable_variables))
 
+
+def test(model, batch_l, batch_ab, encoder):
+    logits = model.call(batch_l)
+    encoder.decode(logits, batch_l, batch_ab)
+
+
 def get_batch_labels(batch_ab, encoder):
     labels = []
     for img in batch_ab:
@@ -42,8 +47,9 @@ def get_batch_labels(batch_ab, encoder):
 if not os.path.exists("./checkpoints"):
     os.makedirs("./checkpoints")
 
-test = False
+testing = False
 model = IC_Model()
+encoder = Encoder()
 l_imgs, ab_imgs = get_train_data()
 
 # For saving/loading models
@@ -52,12 +58,15 @@ checkpoint_prefix = os.path.join(checkpoint_dir, "ckpt")
 checkpoint = tf.train.Checkpoint(model=model)
 manager = tf.train.CheckpointManager(checkpoint, checkpoint_dir, max_to_keep=3)
 
-if test:
+if not os.path.exists("./output"):
+    os.makedirs("./output")
+
+if testing:
     # restores the latest checkpoint using from the manager
-    if not os.path.exists("./output"):
-        os.makedirs("./output")
-    checkpoint.restore(manager.latest_checkpoint)
-    np.random.shuffle(l_imgs)
-    test(model, l_imgs[:10])
+    checkpoint.restore(manager.latest_checkpoint).expect_partial()
+    test(model, l_imgs[:10], ab_imgs[:10], encoder)
 else:
+    # checkpoint.restore(manager.latest_checkpoint)
     train(model, l_imgs, ab_imgs, manager)
+    test(model, l_imgs[:10], ab_imgs[:10], encoder)
+
