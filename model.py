@@ -65,7 +65,7 @@ class IC_Model(tf.keras.Model):
         :return:
         """
 
-        logits = self.model.call(inputs)
+        logits = self.model(inputs)
         return logits
 
 
