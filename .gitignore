@@ -1,5 +1,5 @@
 .idea/
-bin_centers.npy
+resources/
 checkpoints/
 output/
 .DS_Store
