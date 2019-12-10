@@ -3,26 +3,25 @@ import tensorflow as tf
 import numpy as np
 from encoder import Encoder
 from model import IC_Model
-from preprocess import get_train_data
+from preprocess import get_batch, fetch_data
 import hyperparameters as hp
 import os
 
 
-def train(model, l_imgs, ab_imgs, manager):
-    num_batches = floor(l_imgs.shape[0] / hp.BATCH_SIZE)
+def train(model, encoder, manager, random_batches):
+    num_batches = random_batches.shape[0]
     best_loss = float("inf")
-    print(l_imgs.shape)
-    for batch_i in range(num_batches):
-        print("batch {} out of {}".format(batch_i, num_batches))
-        inputs_batch = l_imgs[batch_i * hp.BATCH_SIZE: (batch_i + 1) * hp.BATCH_SIZE]
-        labels_batch = get_batch_labels(ab_imgs[batch_i * hp.BATCH_SIZE: (batch_i + 1) * hp.BATCH_SIZE], encoder)
+    for i, batch_idx in enumerate(random_batches):
+        print("batch {} out of {}".format(i, num_batches))
+        l_imgs, ab_imgs = get_batch(batch_idx)
+        labels = get_batch_labels(ab_imgs, encoder)
         with tf.GradientTape() as tape:
-            logits = model.call(inputs_batch)
-            loss = model.loss_function(logits, labels_batch)
+            logits = model.call(l_imgs)
+            loss = model.loss_function(logits, labels)
 
         print("loss: {}".format(loss))
         
-        if batch_i > 100 and loss < best_loss:
+        if i > 100 and loss < best_loss:
             manager.save()
             best_loss = loss
 
@@ -30,9 +29,10 @@ def train(model, l_imgs, ab_imgs, manager):
         model.optimizer.apply_gradients(zip(gradients, model.trainable_variables))
 
 
-def test(model, batch_l, batch_ab, encoder):
-    logits = model.call(batch_l)
-    encoder.decode(logits, batch_l, batch_ab)
+def test(model, encoder):
+    l_imgs, ab_imgs = get_batch(0)
+    logits = model.call(l_imgs)
+    encoder.decode(logits, l_imgs, ab_imgs)
 
 
 def get_batch_labels(batch_ab, encoder):
@@ -50,7 +50,7 @@ if not os.path.exists("./checkpoints"):
 testing = True
 model = IC_Model()
 encoder = Encoder()
-l_imgs, ab_imgs = get_train_data()
+num_batches = floor(fetch_data() / hp.BATCH_SIZE)
 
 # For saving/loading models
 checkpoint_dir = './checkpoints'
@@ -64,15 +64,14 @@ if not os.path.exists("./output"):
 if testing:
     # restores the latest checkpoint using from the manager
     checkpoint.restore(manager.latest_checkpoint).expect_partial()
-    test(model, l_imgs[:10], ab_imgs[:10], encoder)
+    test(model, encoder)
 else:
     # checkpoint.restore(manager.latest_checkpoint)
     epochs = 100
     for i in range(epochs):
-        indices = tf.range(start=0, limit=l_imgs.shape[0], dtype=tf.int32)
-        indices = tf.random.shuffle(indices)
-        l_imgs = tf.gather(ab_imgs, indices).numpy()
-        ab_imgs = tf.gather(l_imgs, indices).numpy()
-        train(model, l_imgs, ab_imgs, manager)
-    test(model, l_imgs[:10], ab_imgs[:10], encoder)
+        print("epoch {} out of {}".format(i, epochs))
+        random_batches = np.arange(start=0, stop=num_batches, dtype=np.int32)
+        np.random.shuffle(random_batches)
+        train(model, encoder, manager, random_batches)
+    test(model, encoder)
 
