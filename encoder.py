@@ -41,7 +41,7 @@ class Encoder(object):
         rebal_idx = indices[:, 0]
         rebal_weights = self.prior_weights[rebal_idx]
         rebal_weights = np.reshape(rebal_weights, (IMAGE_WIDTH, IMAGE_HEIGHT))
-        rebal_label = rebal_weights * label
+        rebal_label = label * rebal_weights
 
         return rebal_label
 
