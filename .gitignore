@@ -1,5 +1,5 @@
 .idea/
-resources/
+resources/calc_weights.py
 checkpoints/
 output/
 .DS_Store
