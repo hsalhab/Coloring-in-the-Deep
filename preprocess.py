@@ -3,8 +3,7 @@ import tensorflow as tf
 from os import walk
 from os.path import join
 from shutil import copyfile
-from skimage.color import lab2rgb, rgb2lab
-from skimage.io import imread
+import cv2
 
 from hyperparameters import IMAGE_HEIGHT, IMAGE_WIDTH
 
@@ -44,8 +43,9 @@ def convert_to_LAB():
     jpegs = walk_data()
     lab = []
     for i, img in enumerate(jpegs):
-        im = imread(img)
-        lab_im = rgb2lab(im.astype('uint8'))
+        im = cv2.imread(img)
+        lab_im = cv2.cvtColor(im, cv2.COLOR_BGR2LAB)
+        lab_im = ((lab_im / [100, 1, 1]) * [255, 1, 1]) - [0, 128, 128]
         lab.append(lab_im)
 
     lab = np.asarray(lab)
