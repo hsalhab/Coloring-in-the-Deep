@@ -67,6 +67,8 @@ if testing:
     test(model, l_imgs[:10], ab_imgs[:10], encoder)
 else:
     # checkpoint.restore(manager.latest_checkpoint)
-    train(model, l_imgs, ab_imgs, manager)
+    epochs = 100
+    for i in range(epochs):
+        train(model, l_imgs, ab_imgs, manager)
     test(model, l_imgs[:10], ab_imgs[:10], encoder)
 
