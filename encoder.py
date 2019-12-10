@@ -36,7 +36,7 @@ class Encoder(object):
         weights = weights / np.sum(weights, axis=1)[:, np.newaxis]
 
         label[self.pixel_idx, indices] = weights
-        label = np.reshape(label.T, (313, IMAGE_HEIGHT, IMAGE_WIDTH))
+        label = np.reshape(label, (IMAGE_HEIGHT, IMAGE_WIDTH, 313))
 
         rebal_idx = indices[:, 0]
         rebal_weights = self.prior_weights[rebal_idx]
