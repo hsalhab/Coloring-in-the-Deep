@@ -33,6 +33,8 @@ def fetch_data():
         for file in files:
             if file.endswith('.jpg'):
                 data_paths.append(join(root, file))
+                if len(data_paths) == 30:
+                    return 30
                 # copyfile(join(root, file), join("preprocessed/", file))
 
     return len(data_paths)

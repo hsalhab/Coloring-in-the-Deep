@@ -46,7 +46,7 @@ def get_batch_labels(batch_ab, encoder):
 if not os.path.exists("./checkpoints"):
     os.makedirs("./checkpoints")
 
-testing = True
+testing = False
 model = IC_Model()
 encoder = Encoder()
 num_batches = floor(fetch_data() / hp.BATCH_SIZE)
