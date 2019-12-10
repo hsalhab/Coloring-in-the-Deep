@@ -66,7 +66,7 @@ if testing:
     test(model, encoder)
 else:
     # checkpoint.restore(manager.latest_checkpoint)
-    epochs = 1000
+    epochs = 100
     for i in range(epochs):
         print("epoch {} out of {}".format(i, epochs))
         shuffle_data()
