@@ -9,7 +9,7 @@ class IC_Model(tf.keras.Model):
         super(IC_Model, self).__init__()
 
         # TODO: SGD might work better than Adam
-        self.optimizer = tf.keras.optimizers.Adam(learning_rate=hp.LEARNING_RATE)
+        self.optimizer = tf.keras.optimizers.Adam(learning_rate=hp.LEARNING_RATE, beta_1=0.9, beta_2=0.999, epsilon=1e-08)
         self.batch_size = hp.BATCH_SIZE
 
         self.model = tf.keras.Sequential([
