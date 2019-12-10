@@ -47,7 +47,7 @@ def get_batch_labels(batch_ab, encoder):
 if not os.path.exists("./checkpoints"):
     os.makedirs("./checkpoints")
 
-testing = False
+testing = True
 model = IC_Model()
 encoder = Encoder()
 l_imgs, ab_imgs = get_train_data()
