@@ -69,6 +69,10 @@ else:
     # checkpoint.restore(manager.latest_checkpoint)
     epochs = 100
     for i in range(epochs):
+        indices = tf.range(start=0, limit=l_imgs.shape[0], dtype=tf.int32)
+        indices = tf.random.shuffle(indices)
+        l_imgs = tf.gather(ab_imgs, indices).numpy()
+        ab_imgs = tf.gather(l_imgs, indices).numpy()
         train(model, l_imgs, ab_imgs, manager)
     test(model, l_imgs[:10], ab_imgs[:10], encoder)
 
