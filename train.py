@@ -11,7 +11,7 @@ import os
 def train(model, encoder, manager, num_batches):
     best_loss = float("inf")
     for batch_idx in range(num_batches):
-        print("batch {} out of {}".format(i, num_batches))
+        print("batch {} out of {}".format(batch_idx, num_batches))
         l_imgs, ab_imgs = get_batch(batch_idx)
         labels = get_batch_labels(ab_imgs, encoder)
         with tf.GradientTape() as tape:
