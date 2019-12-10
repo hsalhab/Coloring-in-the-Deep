@@ -4,6 +4,7 @@ from os import walk
 from os.path import join
 from shutil import copyfile
 from hyperparameters import BATCH_SIZE
+from random import shuffle
 import cv2
 
 from hyperparameters import IMAGE_HEIGHT, IMAGE_WIDTH
@@ -35,6 +36,10 @@ def fetch_data():
                 # copyfile(join(root, file), join("preprocessed/", file))
 
     return len(data_paths)
+
+
+def shuffle_data():
+    shuffle_data(data_paths)
 
 
 def img2lab(file_name):

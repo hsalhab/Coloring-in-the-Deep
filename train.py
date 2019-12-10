@@ -3,15 +3,14 @@ import tensorflow as tf
 import numpy as np
 from encoder import Encoder
 from model import IC_Model
-from preprocess import get_batch, fetch_data
+from preprocess import get_batch, fetch_data, shuffle_data
 import hyperparameters as hp
 import os
 
 
-def train(model, encoder, manager, random_batches):
-    num_batches = random_batches.shape[0]
+def train(model, encoder, manager, num_batches):
     best_loss = float("inf")
-    for i, batch_idx in enumerate(random_batches):
+    for batch_idx in range(num_batches):
         print("batch {} out of {}".format(i, num_batches))
         l_imgs, ab_imgs = get_batch(batch_idx)
         labels = get_batch_labels(ab_imgs, encoder)
@@ -70,8 +69,7 @@ else:
     epochs = 100
     for i in range(epochs):
         print("epoch {} out of {}".format(i, epochs))
-        random_batches = np.arange(start=0, stop=num_batches, dtype=np.int32)
-        np.random.shuffle(random_batches)
-        train(model, encoder, manager, random_batches)
+        shuffle_data()
+        train(model, encoder, manager, num_batches)
     test(model, encoder)
 
