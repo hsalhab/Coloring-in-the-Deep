@@ -38,7 +38,7 @@ def test(model, encoder):
 def get_batch_labels(batch_ab, encoder):
     labels = []
     for img in batch_ab:
-        label = encoder.soft_encode(img)
+        label = encoder.soft_encode_with_color_rebal(img)
         labels.append(label)
     return np.asarray(labels)
 
