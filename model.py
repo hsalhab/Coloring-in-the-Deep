@@ -1,6 +1,6 @@
 import numpy as np
 import tensorflow as tf
-from tensorflow.keras.layers import Conv2D, BatchNormalization, UpSampling2D, ReLU
+from tensorflow.keras.layers import Conv2D, BatchNormalization, UpSampling2D
 import hyperparameters as hp
 
 
@@ -14,64 +14,42 @@ class IC_Model(tf.keras.Model):
 
         self.model = tf.keras.Sequential([
             Conv2D(32, kernel_size=hp.KERNEL_SIZE, activation='relu', padding='same'),
-            ReLU(),
             Conv2D(32, kernel_size=hp.KERNEL_SIZE, activation='relu', padding='same', strides=(2, 2)),
-            ReLU(),
             BatchNormalization(),
 
             Conv2D(64, kernel_size=hp.KERNEL_SIZE, activation='relu', padding='same'),
-            ReLU(),
             Conv2D(64, kernel_size=hp.KERNEL_SIZE, activation='relu', padding='same', strides=(2, 2)),
-            ReLU(),
             BatchNormalization(),
 
             Conv2D(128, kernel_size=hp.KERNEL_SIZE, activation='relu', padding='same'),
-            ReLU(),
             Conv2D(128, kernel_size=hp.KERNEL_SIZE, activation='relu', padding='same'),
-            ReLU(),
             Conv2D(128, kernel_size=hp.KERNEL_SIZE, activation='relu', padding='same', strides=(2, 2)),
-            ReLU(),
             BatchNormalization(),
 
             Conv2D(256, kernel_size=hp.KERNEL_SIZE, activation='relu', padding='same'),
-            ReLU(),
             Conv2D(256, kernel_size=hp.KERNEL_SIZE, activation='relu', padding='same'),
-            ReLU(),
             Conv2D(256, kernel_size=hp.KERNEL_SIZE, activation='relu', padding='same'),
-            ReLU(),
             BatchNormalization(),
 
             Conv2D(256, kernel_size=hp.KERNEL_SIZE, activation='relu', padding='same', dilation_rate=2),
-            ReLU(),
             Conv2D(256, kernel_size=hp.KERNEL_SIZE, activation='relu', padding='same', dilation_rate=2),
-            ReLU(),
             Conv2D(256, kernel_size=hp.KERNEL_SIZE, activation='relu', padding='same', dilation_rate=2),
-            ReLU(),
             BatchNormalization(),
 
             Conv2D(256, kernel_size=hp.KERNEL_SIZE, activation='relu', padding='same', dilation_rate=2),
-            ReLU(),
             Conv2D(256, kernel_size=hp.KERNEL_SIZE, activation='relu', padding='same', dilation_rate=2),
-            ReLU(),
             Conv2D(256, kernel_size=hp.KERNEL_SIZE, activation='relu', padding='same', dilation_rate=2),
-            ReLU(),
             BatchNormalization(),
 
             Conv2D(128, kernel_size=hp.KERNEL_SIZE, activation='relu', padding='same'),
-            ReLU(),
             Conv2D(128, kernel_size=hp.KERNEL_SIZE, activation='relu', padding='same'),
-            ReLU(),
             Conv2D(128, kernel_size=hp.KERNEL_SIZE, activation='relu', padding='same'),
-            ReLU(),
             BatchNormalization(),
 
             UpSampling2D(size=(2, 2)),
             Conv2D(64, kernel_size=hp.KERNEL_SIZE, activation='relu', padding='same'),
-            ReLU(),
             Conv2D(64, kernel_size=hp.KERNEL_SIZE, activation='relu', padding='same'),
-            ReLU(),
             Conv2D(64, kernel_size=hp.KERNEL_SIZE, activation='relu', padding='same'),
-            ReLU(),
             BatchNormalization(),
 
             Conv2D(hp.NUM_CLASSES, kernel_size=1, padding='same'),
