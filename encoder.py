@@ -2,8 +2,7 @@ import sklearn.neighbors as nn
 from hyperparameters import IMAGE_HEIGHT, IMAGE_WIDTH, SIGMA
 import numpy as np
 import tensorflow as tf
-from skimage.color import lab2rgb, rgb2lab
-from PIL import Image
+import cv2
 
 class Encoder(object):
     def __init__(self):
@@ -36,8 +35,8 @@ class Encoder(object):
             img = np.zeros((IMAGE_HEIGHT, IMAGE_WIDTH, 3))
             img[:, :, 0] = l_img
             img[:, :, 1:] = ab_img
-            img = lab2rgb(img)
-            img = (255 * np.clip(img, 0, 1)).astype('uint8')
-            img_ = Image.fromarray(img)
-            img_.save("output/img{}.png".format(i))
+            img = ((img + [0, 128, 128]) / [255, 1, 1]) * [100, 1, 1]
+            img = cv2.cvtColor(img.astype('uint8'), cv2.COLOR_LAB2BGR)
+            # img = (255 * np.clip(img, 0, 1)).astype('uint8')
+            cv2.imwrite("output/img{}.png".format(i), img)
             print("saving img{}.png".format(i))
