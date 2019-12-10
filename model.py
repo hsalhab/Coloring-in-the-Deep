@@ -80,6 +80,5 @@ class IC_Model(tf.keras.Model):
         # TODO: soft-encode labels before passing into loss_function
         prbs = tf.nn.softmax(logits)
         return -tf.reduce_sum(labels * tf.math.log(prbs + 1e-8)) / (prbs.shape[0] * hp.IMAGE_HEIGHT * hp.IMAGE_WIDTH)
-        # return tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels, logits))
 
 

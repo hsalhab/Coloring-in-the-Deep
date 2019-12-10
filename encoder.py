@@ -57,6 +57,5 @@ class Encoder(object):
             img[:, :, 1:] = ab_img
             img = ((img + [0, 128, 128]) / [255, 1, 1]) * [100, 1, 1]
             img = cv2.cvtColor(img.astype('uint8'), cv2.COLOR_LAB2BGR)
-            # img = (255 * np.clip(img, 0, 1)).astype('uint8')
             cv2.imwrite("output/img{}.png".format(i), img)
             print("saving img{}.png".format(i))
