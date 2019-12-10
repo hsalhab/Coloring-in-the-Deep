@@ -39,7 +39,7 @@ def fetch_data():
 
 
 def shuffle_data():
-    shuffle_data(data_paths)
+    shuffle(data_paths)
 
 
 def img2lab(file_name):
