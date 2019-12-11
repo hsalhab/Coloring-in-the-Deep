@@ -49,7 +49,7 @@ if not os.path.exists("./checkpoints"):
 testing = False
 model = IC_Model()
 encoder = Encoder()
-num_batches = floor(fetch_data() / hp.BATCH_SIZE)
+num_batches = int(floor(fetch_data() / hp.BATCH_SIZE))
 
 # For saving/loading models
 checkpoint_dir = './checkpoints'
