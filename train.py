@@ -71,5 +71,6 @@ else:
         print("epoch {} out of {}".format(i, epochs))
         shuffle_data()
         train(model, encoder, manager, num_batches)
+    manager.save()
     test(model, encoder)
 
