@@ -20,7 +20,7 @@ def train(model, encoder, manager, num_batches):
 
         print("loss: {}".format(loss))
         
-        if i > 100 and loss < best_loss:
+        if epoch > 100 and loss < best_loss:
             manager.save()
             best_loss = loss
 
@@ -38,7 +38,7 @@ def test(model, encoder, epoch, num_batches):
     logits = model.call(l_imgs)
     encoder.decode(logits, l_imgs, ab_imgs, epoch, 0)
 
-    batch_id = np.random.randint(0, num_batches-1)
+    batch_id = np.random.randint(1, num_batches-1)
     if not os.path.exists("./output/{}/{}".format(epoch, batch_id)):
         os.makedirs("./output/{}/{}".format(epoch, batch_id))
     l_imgs, ab_imgs = get_batch(batch_id)
@@ -62,6 +62,7 @@ testing = False
 model = IC_Model()
 encoder = Encoder()
 num_batches = int(floor(fetch_data() / hp.BATCH_SIZE))
+num_batches = 3
 
 # For saving/loading models
 checkpoint_dir = './checkpoints'
