@@ -28,7 +28,7 @@ def fetch_data():
     """
 
     global data_paths
-    flip = 0
+    flip = 1
     data_dir = "SUN2012/Images/"
     for root, subfolder, files in walk(data_dir):
         for file in files:
