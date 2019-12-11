@@ -28,14 +28,18 @@ def fetch_data():
     """
 
     global data_paths
+    flip = 0
     data_dir = "SUN2012/Images/"
     for root, subfolder, files in walk(data_dir):
         for file in files:
-            if file.endswith('.jpg') and "bamboo_forest" in root:
+            if file.endswith('.jpg') and flip == 1:
                 data_paths.append(join(root, file))
+                flip = 0
                 # if len(data_paths) == 30:
                 #     return 30
                 # copyfile(join(root, file), join("preprocessed/", file))
+            else:
+                flip = 1
 
     return len(data_paths)
 
