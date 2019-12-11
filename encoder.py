@@ -46,7 +46,7 @@ class Encoder(object):
 
         return rebal_label
 
-    def decode(self, logits, l_imgs, ab_imgs):
+    def decode(self, logits, l_imgs, ab_imgs, epoch, batch):
         for i in range(ab_imgs.shape[0]):
             prbs = tf.nn.softmax(logits[i])
             # prbs = self.soft_encode(ab_imgs[i]) # uncomment to test soft encoding/decoding
@@ -57,5 +57,5 @@ class Encoder(object):
             img[:, :, 1:] = ab_img
             img = ((img + [0, 128, 128]) / [255, 1, 1]) * [100, 1, 1]
             img = cv2.cvtColor(img.astype('uint8'), cv2.COLOR_LAB2BGR)
-            cv2.imwrite("output/img{}.png".format(i), img)
-            print("saving img{}.png".format(i))
+            cv2.imwrite("output/{}/{}/img{}.png".format(epoch, batch, i), img)
+            print("output/{}/{}/img{}.png".format(epoch, batch, i))

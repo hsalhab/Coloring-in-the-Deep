@@ -28,10 +28,22 @@ def train(model, encoder, manager, num_batches):
         model.optimizer.apply_gradients(zip(gradients, model.trainable_variables))
 
 
-def test(model, encoder):
+def test(model, encoder, epoch, num_batches):
+    if not os.path.exists("./output/{}".format(epoch)):
+        os.makedirs("./output/{}".format(epoch))
+
+    if not os.path.exists("./output/{}/0".format(epoch)):
+        os.makedirs("./output/{}/0".format(epoch))
     l_imgs, ab_imgs = get_batch(0)
     logits = model.call(l_imgs)
-    encoder.decode(logits, l_imgs, ab_imgs)
+    encoder.decode(logits, l_imgs, ab_imgs, epoch, 0)
+
+    batch_id = np.random.randint(0, num_batches-1)
+    if not os.path.exists("./output/{}/{}".format(epoch, batch_id)):
+        os.makedirs("./output/{}/{}".format(epoch, batch_id))
+    l_imgs, ab_imgs = get_batch(batch_id)
+    logits = model.call(l_imgs)
+    encoder.decode(logits, l_imgs, ab_imgs, epoch, batch_id)
 
 
 def get_batch_labels(batch_ab, encoder):
@@ -67,10 +79,11 @@ if testing:
 else:
     # checkpoint.restore(manager.latest_checkpoint)
     epochs = hp.EPOCHS
-    for i in range(epochs):
-        print("epoch {} out of {}".format(i, epochs))
+    for epoch in range(epochs):
+        print("epoch {} out of {}".format(epoch, epochs))
         shuffle_data()
         train(model, encoder, manager, num_batches)
+        test(model, encoder, epoch, num_batches)
     manager.save()
-    test(model, encoder)
+
 
